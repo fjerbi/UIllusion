@@ -11,7 +11,6 @@ import { Code2, Camera, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import CodePreview from "../codePreview/_components/DemoPreview";
 
-
 export default function Generate() {
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,13 +45,12 @@ export default function Generate() {
     }
   };
 
-
   const handleHome = () => {
     router.push("/");
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 to-purple-400 text-white p-8">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 to-purple-400 text-white p-6 sm:p-8">
       <motion.button
         onClick={handleHome}
         className="absolute top-4 left-4 bg-purple-600 text-white px-4 py-2 rounded-lg shadow-xl hover:bg-purple-700 transition duration-300 flex items-center gap-2"
@@ -65,7 +63,7 @@ export default function Generate() {
       </motion.button>
 
       <motion.h1
-        className="text-5xl font-normal mb-6 text-center"
+        className="text-3xl sm:text-5xl font-normal mb-6 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -79,11 +77,10 @@ export default function Generate() {
         value={imageUrl}
         onChange={handleImageUrlChange}
         placeholder="Enter Wireframe Image URL"
-        className="mb-4 w-96 p-2 bg-white text-purple-600 rounded-md shadow-lg"
+        className="mb-4 w-full sm:w-96 p-2 bg-white text-purple-600 rounded-md shadow-lg"
       />
 
- 
-      <div className="mb-4 flex items-center gap-4 ">
+      <div className="mb-4 flex items-center gap-4">
         <label className="text-white">Output Format:</label>
         <select
           value={outputFormat}
@@ -139,11 +136,10 @@ export default function Generate() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center gap-2">
               <Camera /> Generated Code (
               {outputFormat === "jsx" ? "JSX + Tailwind CSS" : "HTML + CSS"})
             </h2>
-          
           </motion.div>
         )}
 
@@ -154,7 +150,7 @@ export default function Generate() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center gap-2">
               <Camera /> Preview
             </h2>
             <div className="h-full w-full overflow-auto">
@@ -167,8 +163,6 @@ export default function Generate() {
           </motion.div>
         )}
       </div>
-
-   
     </div>
   );
 }

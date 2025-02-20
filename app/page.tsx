@@ -22,7 +22,7 @@ const Home = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 to-purple-400 p-8">
       {/* Main Heading */}
       <motion.h1
-        className="text-5xl font-semibold text-center text-white mb-8"
+        className="text-3xl sm:text-4xl md:text-5xl font-semibold text-center text-white mb-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -40,7 +40,7 @@ const Home = () => {
           animate="visible"
           transition={{ duration: 0.5 }}
         >
-          <h3 className="text-xl font-bold text-white">
+          <h3 className="text-xl sm:text-2xl font-bold text-white">
             Instant Code Generation
           </h3>
           <p className="text-gray-200 text-center">
@@ -57,7 +57,7 @@ const Home = () => {
           animate="visible"
           transition={{ duration: 0.7 }}
         >
-          <h3 className="text-xl font-bold text-white">
+          <h3 className="text-xl sm:text-2xl font-bold text-white">
             Tailored to Your Design
           </h3>
           <p className="text-gray-200 text-center">
@@ -74,29 +74,28 @@ const Home = () => {
           animate="visible"
           transition={{ duration: 0.9 }}
         >
-          <h3 className="text-xl font-bold text-white">Quick & Efficient</h3>
+          <h3 className="text-xl sm:text-2xl font-bold text-white">Quick & Efficient</h3>
           <p className="text-gray-200 text-center">
             Save time with our rapid and efficient wireframe-to-code conversion
             process.
           </p>
         </motion.div>
       </div>
+
       {/* How to use section */}
       <motion.div
-        className=" "
         variants={cardVariants}
         initial="hidden"
         animate="visible"
         transition={{ duration: 0.9 }}
       >
-        <h1 className="text-2xl font-light text-white mb-2 items-center justify-center">
-          {" "}
-          How to{" "}
+        <h1 className="text-2xl font-light text-white mb-2 text-center">
+          How to
         </h1>
       </motion.div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-        {/* Card 1 */}
+        {/* Image Cards */}
         <motion.div
           className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4 cursor-pointer"
           variants={cardVariants}
@@ -113,7 +112,6 @@ const Home = () => {
           />
         </motion.div>
 
-        {/* Card 2 */}
         <motion.div
           className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4 cursor-pointer"
           variants={cardVariants}
@@ -130,7 +128,6 @@ const Home = () => {
           />
         </motion.div>
 
-        {/* Card 3 */}
         <motion.div
           className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4 cursor-pointer"
           variants={cardVariants}
@@ -147,7 +144,8 @@ const Home = () => {
           />
         </motion.div>
       </div>
-      {/* */}
+
+      {/* Call to Action Button */}
       <motion.button
         onClick={handleGenerateClick}
         className="bg-purple-700 text-white px-8 py-3 rounded-lg shadow-xl hover:bg-purple-800 transition duration-300 ease-in-out mt-8"
@@ -158,6 +156,7 @@ const Home = () => {
         Start Generating Code
       </motion.button>
 
+      {/* Information Section */}
       <motion.div
         variants={cardVariants}
         initial="hidden"
@@ -169,15 +168,11 @@ const Home = () => {
           Currently, the code generator produces JSX with TailwindCSS, enabling
           seamless integration with modern frontend frameworks. However,
           upcoming updates will expand its capabilities to support multiple
-          technologies, including pure HTML with CSS, TSX with TailwindCSS for
-          TypeScript-based projects, and even React Native for mobile
-          applications. This evolution will provide developers with greater
-          flexibility, allowing them to generate code tailored to their specific
-          tech stack and project requirements.
+          technologies.
         </p>
       </motion.div>
-      {/* Developer Section */}
 
+      {/* Developer Section */}
       <motion.div
         variants={cardVariants}
         initial="hidden"
