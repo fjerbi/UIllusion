@@ -4,11 +4,11 @@ import "./globals.css";
 import { Providers } from "@/providers";
 import { seoData } from "@/data/seo";
 
-// Correctly define Quicksand font
+
 const quicksand = Quicksand({
   variable: "--font-quicksand",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"], // Include necessary weights
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {

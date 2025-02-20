@@ -7,16 +7,17 @@ import { setScript } from "@/store/scriptSlice";
 import { RootState } from "@/store/scriptSlice";
 import { Input } from "@/components/ui/input";
 import { ProgressBar } from "react-loader-spinner";
-import { Code2, Camera, Home } from "lucide-react"; // Import Home icon
-import { motion } from "motion/react";
+import { Code2, Camera, Home } from "lucide-react";
+import { motion } from "framer-motion";
 import { Editor } from "@monaco-editor/react";
-import JsxParser from "react-jsx-parser";
 
+import JsxParser from "react-jsx-parser";
 
 export default function Generate() {
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const script = useSelector((state: RootState) => state.script.script); // Get script from Redux
+  const [outputFormat, setOutputFormat] = useState<"jsx" | "html">("jsx");
+  const script = useSelector((state: RootState) => state.script.script);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -29,9 +30,15 @@ export default function Generate() {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/generate-code", { imageUrl });
+      const response = await axios.post("/api/generate-code", {
+        imageUrl,
+        outputFormat,
+      });
       let { script } = response.data;
-      script = script.replace(/^```jsx/, "").replace(/```$/, "").trim();
+      script = script
+        .replace(/^```(jsx|html)/, "")
+        .replace(/```$/, "")
+        .trim();
       dispatch(setScript(script));
     } catch (error) {
       console.error("Error generating code:", error);
@@ -45,7 +52,7 @@ export default function Generate() {
   };
 
   const handleHome = () => {
-    router.push("/"); 
+    router.push("/");
   };
 
   return (
@@ -71,13 +78,27 @@ export default function Generate() {
       </motion.h1>
 
       <Input
-      required={true}
+        required={true}
         type="text"
         value={imageUrl}
         onChange={handleImageUrlChange}
         placeholder="Enter Wireframe Image URL"
-        className="mb-4 w-96 p-2 bg-white text-purple-600 rounded-s-md shadow-lg"
+        className="mb-4 w-96 p-2 bg-white text-purple-600 rounded-md shadow-lg"
       />
+
+ 
+      <div className="mb-4 flex items-center gap-4 ">
+        <label className="text-white">Output Format:</label>
+        <select
+          value={outputFormat}
+          onChange={(e) => setOutputFormat(e.target.value as "jsx" | "html")}
+          className="p-2 bg-white text-purple-600 rounded-md shadow-lg"
+        >
+          <option value="jsx">JSX + Tailwind CSS</option>
+          <option value="html">HTML + CSS</option>
+        </select>
+      </div>
+
       <motion.button
         onClick={handleSubmit}
         disabled={loading}
@@ -88,7 +109,12 @@ export default function Generate() {
       >
         {loading ? (
           <>
-            <ProgressBar height="24" width="24" color="#ffffff" ariaLabel="loading" />
+            <ProgressBar
+              height="24"
+              width="24"
+              color="#ffffff"
+              ariaLabel="loading"
+            />
             Generating...
           </>
         ) : (
@@ -109,13 +135,25 @@ export default function Generate() {
           <p>Loading...</p>
         </motion.div>
       )}
+
       <div className="mt-6 w-full max-w-6xl flex flex-col items-center space-y-6">
         {script && (
-          <motion.div className="w-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+          <motion.div
+            className="w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <Camera /> Generated Code (JSX + Tailwind CSS)
+              <Camera /> Generated Code (
+              {outputFormat === "jsx" ? "JSX + Tailwind CSS" : "HTML + CSS"})
             </h2>
-            <Editor height="50vh" defaultLanguage="javascript" value={script} theme="vs-dark" />
+            <Editor
+              height="50vh"
+              defaultLanguage={outputFormat === "jsx" ? "javascript" : "html"}
+              value={script}
+              theme="vs-dark"
+            />
           </motion.div>
         )}
 
@@ -130,7 +168,11 @@ export default function Generate() {
               <Camera /> Preview
             </h2>
             <div className="h-full w-full overflow-auto">
-              <JsxParser jsx={script} components={{}} />
+              {outputFormat === "jsx" ? (
+                <JsxParser jsx={script} components={{}} />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: script }} />
+              )}
             </div>
           </motion.div>
         )}
