@@ -11,7 +11,6 @@ export const config = {
     },
 };
 
-// Define the RequestBody interface
 interface RequestBody {
     imageUrl: string;
     outputFormat: "jsx" | "html";
@@ -23,7 +22,7 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     try {
-        const body: RequestBody = await request.json(); 
+        const body: RequestBody = await request.json();
         const { imageUrl, outputFormat } = body;
 
         if (!imageUrl) {
@@ -33,7 +32,7 @@ export async function POST(request: Request): Promise<Response> {
         const systemPrompt =
             outputFormat === "jsx"
                 ? "You are an AI Coding Assistant that generates UI JSX and Tailwind CSS code based on a given wireframe. Do not Include Images, replace them with placeholder images. Provide the whole component with all imports."
-                : "You are an AI Coding Assistant that generates HTML and CSS code based on a given wireframe. Do not Include Images, replace them with placeholder images. Provide the whole component with all imports.";
+                : "You are an AI Coding Assistant that generates HTML and CSS code based on a given wireframe.Do not Include Images, replace them with placeholder images. Provide the whole component with all imports.";
 
         const apiResponse = await openai.chat.completions.create({
             model: "google/gemini-2.0-pro-exp-02-05:free",
@@ -70,13 +69,9 @@ export async function POST(request: Request): Promise<Response> {
 
         return new Response(JSON.stringify({ script, preview }), { status: 200 });
     } catch (error: unknown) {
-       
-        const typedError = error as Error;
-        // Log detailed error information
-        console.error('Error details:', typedError.response || typedError.message || typedError);
-
+        console.error("Error generating code:", error);
         return new Response(
-            JSON.stringify({ message: "Error generating code", error: typedError.message }),
+            JSON.stringify({ message: "Error generating code", error: (error as Error).message }),
             { status: 500 }
         );
     }
