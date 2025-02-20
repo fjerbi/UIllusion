@@ -10,7 +10,7 @@ import { ProgressBar } from "react-loader-spinner";
 import { Code2, Camera, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import { Editor } from "@monaco-editor/react";
-import { JsxParser } from "react-jsx-parser";
+import  JsxParser  from "react-jsx-parser";
 
 export default function Generate() {
   const [imageUrl, setImageUrl] = useState("");
