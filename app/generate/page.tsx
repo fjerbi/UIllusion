@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import { ProgressBar } from "react-loader-spinner";
 import { Code2, Camera, Home } from "lucide-react";
 import { motion } from "framer-motion";
-import { Editor } from "@monaco-editor/react";
-import  JsxParser  from "react-jsx-parser";
+import CodePreview from "../codePreview/_components/DemoPreview";
+
 
 export default function Generate() {
   const [imageUrl, setImageUrl] = useState("");
@@ -46,9 +46,6 @@ export default function Generate() {
     }
   };
 
-  const handlePreview = () => {
-    router.push("/preview");
-  };
 
   const handleHome = () => {
     router.push("/");
@@ -146,12 +143,7 @@ export default function Generate() {
               <Camera /> Generated Code (
               {outputFormat === "jsx" ? "JSX + Tailwind CSS" : "HTML + CSS"})
             </h2>
-            <Editor
-              height="50vh"
-              defaultLanguage={outputFormat === "jsx" ? "javascript" : "html"}
-              value={script}
-              theme="vs-dark"
-            />
+          
           </motion.div>
         )}
 
@@ -167,7 +159,7 @@ export default function Generate() {
             </h2>
             <div className="h-full w-full overflow-auto">
               {outputFormat === "jsx" ? (
-                <JsxParser jsx={script} components={{}} />
+                <CodePreview script={script} />
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: script }} />
               )}
@@ -176,17 +168,7 @@ export default function Generate() {
         )}
       </div>
 
-      {script && (
-        <motion.button
-          onClick={handlePreview}
-          className="bg-purple-700 text-white px-6 py-2 mt-4 rounded-lg shadow-xl hover:bg-purple-800 flex items-center justify-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5 }}
-        >
-          Go to Preview
-        </motion.button>
-      )}
+   
     </div>
   );
 }

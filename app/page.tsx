@@ -9,14 +9,13 @@ import Zoom from "next-image-zoom";
 const Home = () => {
   const router = useRouter();
 
-
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 },
   };
 
   const handleGenerateClick = () => {
-    router.push("/generate"); 
+    router.push("/generate");
   };
 
   return (
@@ -83,12 +82,23 @@ const Home = () => {
         </motion.div>
       </div>
       {/* How to use section */}
-      <h1 className="text-2xl font-light text-white mb-2 items-center justify-center"> How to </h1>
+      <motion.div
+        className=" "
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.9 }}
+      >
+        <h1 className="text-2xl font-light text-white mb-2 items-center justify-center">
+          {" "}
+          How to{" "}
+        </h1>
+      </motion.div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-     
         {/* Card 1 */}
         <motion.div
-          className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4"
+          className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4 cursor-pointer"
           variants={cardVariants}
           initial="hidden"
           animate="visible"
@@ -105,7 +115,7 @@ const Home = () => {
 
         {/* Card 2 */}
         <motion.div
-          className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4"
+          className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4 cursor-pointer"
           variants={cardVariants}
           initial="hidden"
           animate="visible"
@@ -122,7 +132,7 @@ const Home = () => {
 
         {/* Card 3 */}
         <motion.div
-          className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4"
+          className="bg-black bg-opacity-50 p-6 rounded-lg shadow-2xl flex flex-col items-center space-y-4 cursor-pointer"
           variants={cardVariants}
           initial="hidden"
           animate="visible"
@@ -148,8 +158,33 @@ const Home = () => {
         Start Generating Code
       </motion.button>
 
+      <motion.div
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.9 }}
+        className="bg-black mt-10 bg-opacity-60 p-8 rounded-lg shadow-lg text-center w-full sm:w-1/2"
+      >
+        <p className="text-white text-center font-light">
+          Currently, the code generator produces JSX with TailwindCSS, enabling
+          seamless integration with modern frontend frameworks. However,
+          upcoming updates will expand its capabilities to support multiple
+          technologies, including pure HTML with CSS, TSX with TailwindCSS for
+          TypeScript-based projects, and even React Native for mobile
+          applications. This evolution will provide developers with greater
+          flexibility, allowing them to generate code tailored to their specific
+          tech stack and project requirements.
+        </p>
+      </motion.div>
       {/* Developer Section */}
-      <div className="bg-black mt-10 bg-opacity-60 p-8 rounded-lg shadow-lg text-center w-full sm:w-1/2">
+
+      <motion.div
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.9 }}
+        className="bg-black mt-10 bg-opacity-60 p-8 rounded-lg shadow-lg text-center w-full sm:w-1/2"
+      >
         <Link href="https://fjerbi.github.io/">
           <Image
             src="/firasjerbiv2.png"
@@ -196,7 +231,7 @@ const Home = () => {
         >
           Contribute on GitHub
         </a>
-      </div>
+      </motion.div>
     </div>
   );
 };
