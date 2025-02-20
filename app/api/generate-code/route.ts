@@ -1,21 +1,3 @@
-import { OpenAI } from "openai";
-
-const openai = new OpenAI({
-    apiKey: process.env.NEXT_PUBLIC_OPENROUTER_API_TOKEN!,
-    baseURL: "https://openrouter.ai/api/v1/",
-});
-
-export const config = {
-    api: {
-        bodyParser: true,
-    },
-};
-
-interface RequestBody {
-    imageUrl: string;
-    outputFormat: "jsx" | "html";
-}
-
 export async function POST(request: Request): Promise<Response> {
     if (request.method !== "POST") {
         return new Response(JSON.stringify({ message: "Method not allowed" }), { status: 405 });
@@ -69,11 +51,13 @@ export async function POST(request: Request): Promise<Response> {
 
         return new Response(JSON.stringify({ script, preview }), { status: 200 });
     } catch (error: unknown) {
+        // Type assertion to Error object
+        const typedError = error as Error;
         // Log detailed error information
-        console.error('Error details:', error.response || error.message || error);
+        console.error('Error details:', typedError.response || typedError.message || typedError);
 
         return new Response(
-            JSON.stringify({ message: "Error generating code", error: (error as Error).message }),
+            JSON.stringify({ message: "Error generating code", error: typedError.message }),
             { status: 500 }
         );
     }
