@@ -2,7 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/scriptSlice";
-import JsxParser from "react-jsx-parser";
+import { JsxParser } from "react-jsx-parser";
 import { useState, useEffect } from "react";
 
 export default function Preview() {
