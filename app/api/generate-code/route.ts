@@ -1,7 +1,7 @@
 import { OpenAI } from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENROUTER_API_TOKEN,
+  apiKey: process.env.NEXT_PUBLIC_OPENROUTER_API_TOKEN!,
   baseURL: "https://openrouter.ai/api/v1/",
 });
 
@@ -11,19 +11,24 @@ export const config = {
   },
 };
 
-export async function POST(request: Request) {
+interface RequestBody {
+  imageUrl: string;
+  outputFormat: "jsx" | "html";
+}
+
+export async function POST(request: Request): Promise<Response> {
   if (request.method !== "POST") {
     return new Response(JSON.stringify({ message: "Method not allowed" }), { status: 405 });
   }
 
   try {
-    const { imageUrl, outputFormat } = await request.json(); 
+    const body: RequestBody = await request.json();
+    const { imageUrl, outputFormat } = body;
 
     if (!imageUrl) {
       return new Response(JSON.stringify({ message: "No image URL provided" }), { status: 400 });
     }
 
-    
     const systemPrompt =
       outputFormat === "jsx"
         ? "You are an AI Coding Assistant that generates UI JSX and Tailwind CSS code based on a given wireframe. Provide only the code without comments, starting and ending with a div."
@@ -59,14 +64,14 @@ export async function POST(request: Request) {
       n: 1,
     });
 
-    const script = apiResponse.choices[0]?.message?.content?.trim() || "No script generated";
-    const preview = outputFormat === "jsx" ? `<html><body>${script}</body></html>` : script;
+    const script: string = apiResponse.choices[0]?.message?.content?.trim() || "No script generated";
+    const preview: string = outputFormat === "jsx" ? `<html><body>${script}</body></html>` : script;
 
     return new Response(JSON.stringify({ script, preview }), { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error generating code:", error);
     return new Response(
-      JSON.stringify({ message: "Error generating code", error: error.message }),
+      JSON.stringify({ message: "Error generating code", error: (error as Error).message }),
       { status: 500 }
     );
   }
