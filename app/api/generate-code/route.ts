@@ -16,8 +16,16 @@ interface RequestBody {
     outputFormat: "jsx" | "html";
 }
 
-// Function to create a timeout promise
+
 const timeoutPromise = (ms: number) => new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), ms));
+
+interface ApiResponse {
+    choices: Array<{
+        message: {
+            content: string;
+        };
+    }>;
+}
 
 export async function POST(request: Request): Promise<Response> {
     if (request.method !== "POST") {
@@ -37,10 +45,10 @@ export async function POST(request: Request): Promise<Response> {
                 ? "You are an AI Coding Assistant that generates UI JSX and Tailwind CSS code based on a given wireframe. Do not Include Images, replace them with placeholder images. Provide the whole component with all imports."
                 : "You are an AI Coding Assistant that generates HTML and CSS code based on a given wireframe. Do not Include Images, replace them with placeholder images. Provide the whole component with all imports.";
 
-       
+      
         const timeoutDuration = 10000;
 
-       
+     
         const apiResponse = await Promise.race([
             openai.chat.completions.create({
                 model: "google/gemini-2.0-pro-exp-02-05:free",
@@ -71,10 +79,13 @@ export async function POST(request: Request): Promise<Response> {
                 presence_penalty: 0,
                 n: 1,
             }),
-            timeoutPromise(timeoutDuration),
+            timeoutPromise(timeoutDuration), // Timeout promise
         ]);
 
-        const script: string = apiResponse.choices[0]?.message?.content?.trim() || "No script generated";
+        // Cast apiResponse to ApiResponse type
+        const typedApiResponse = apiResponse as ApiResponse;
+
+        const script: string = typedApiResponse.choices[0]?.message?.content?.trim() || "No script generated";
         const preview: string = outputFormat === "jsx" ? `<html><body>${script}</body></html>` : script;
 
         return new Response(JSON.stringify({ script, preview }), { status: 200 });
