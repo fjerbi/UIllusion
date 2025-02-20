@@ -27,6 +27,8 @@ interface ApiResponse {
     }>;
 }
 
+const timeoutDuration = 30000; // Increased timeout to 30 seconds
+
 export async function POST(request: Request): Promise<Response> {
     if (request.method !== "POST") {
         return new Response(JSON.stringify({ message: "Method not allowed" }), { status: 405 });
@@ -45,10 +47,6 @@ export async function POST(request: Request): Promise<Response> {
                 ? "You are an AI Coding Assistant that generates UI JSX and Tailwind CSS code based on a given wireframe. Do not Include Images, replace them with placeholder images. Provide the whole component with all imports."
                 : "You are an AI Coding Assistant that generates HTML and CSS code based on a given wireframe. Do not Include Images, replace them with placeholder images. Provide the whole component with all imports.";
 
-      
-        const timeoutDuration = 10000;
-
-     
         const apiResponse = await Promise.race([
             openai.chat.completions.create({
                 model: "google/gemini-2.0-pro-exp-02-05:free",
@@ -79,19 +77,19 @@ export async function POST(request: Request): Promise<Response> {
                 presence_penalty: 0,
                 n: 1,
             }),
-            timeoutPromise(timeoutDuration), // Timeout promise
+            timeoutPromise(timeoutDuration),
         ]);
 
-        // Cast apiResponse to ApiResponse type
         const typedApiResponse = apiResponse as ApiResponse;
-
         const script: string = typedApiResponse.choices[0]?.message?.content?.trim() || "No script generated";
         const preview: string = outputFormat === "jsx" ? `<html><body>${script}</body></html>` : script;
 
         return new Response(JSON.stringify({ script, preview }), { status: 200 });
     } catch (error: unknown) {
-        // Log error details
         console.error("Error generating code:", error);
+        if (error instanceof Error) {
+            console.error("Error stack:", error.stack);
+        }
         return new Response(
             JSON.stringify({ message: "Error generating code", error: (error as Error).message }),
             { status: 500 }
