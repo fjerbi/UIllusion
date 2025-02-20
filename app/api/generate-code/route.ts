@@ -69,7 +69,9 @@ export async function POST(request: Request): Promise<Response> {
 
         return new Response(JSON.stringify({ script, preview }), { status: 200 });
     } catch (error: unknown) {
-        console.error("Error generating code:", error);
+        // Log detailed error information
+        console.error('Error details:', error.response || error.message || error);
+
         return new Response(
             JSON.stringify({ message: "Error generating code", error: (error as Error).message }),
             { status: 500 }
