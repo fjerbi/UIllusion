@@ -112,7 +112,6 @@ export default function Generate() {
             <ProgressBar
               height="24"
               width="24"
-              color="#ffffff"
               ariaLabel="loading"
             />
             Generating...
